@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#define S 10
+
+struct hash{
+  struct node *add;
+}h[S];
+
+struct node{
+  int data;
+  struct node *next;
+};
+
+int hashfunc(int n){
+  return n%S;
+}
+
+
+void insert(int n){
+  struct node *temp, *adrs;
+  
+  temp = (struct node*)malloc(sizeof(struct node));
+  temp->data = n;
+  temp->next = NULL;
+  if (h[hashfunc(n)].add == INT_MIN){
+    h[hashfunc(n)].add = temp;
+  }
+  else{
+    adrs = h[hashfunc(n)].add;
+    while(adrs->next != NULL){
+      adrs = adrs->next;
+    }
+    adrs->next = temp;
+  } }
+
+int search(int n){
+  int count=1;
+  struct node *temp;
+  if (h[hashfunc(n)].add == INT_MIN){
+    printf("%d doesn't exists\n\n", n);
+    return 0;
+  }
+  else{
+    temp = h[hashfunc(n)].add;
+    while(temp !=NULL){
+      if(temp->data == n){
+        printf("\nElement '%d' found at hash index of %d and in %d position of chain",n, hashfunc(n),count);
+        return 0;
+      }
+      count += 1;
+      temp = temp->next;
+    }
+    printf("\nElement '%d' not found at hash index of %d", n, hashfunc(n));
+    return 0;
+  } }
+
+
+int main(){
+
+  int i;
+  for(i=0;i<S;i++)
+    h[i].add = INT_MIN;
+  
+  for(i=0;i<=250;i++)
+    insert(i);
+    
+  for(i=0;i<=250;i++)
+    search(i);
+    
+  return 0;
+}
